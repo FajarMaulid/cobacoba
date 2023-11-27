@@ -12,6 +12,10 @@ enum MenuCategory {
 }
 
 Menu menuResponseModel(String str) => Menu.fromJson(json.decode(str));
+List<Menu> listMenuResponseModel(String str) {
+  var jsonList = json.decode(str) as List;
+  return jsonList.map((jsonItem) => Menu.fromJson(jsonItem)).toList();
+}
 
 class Menu {
   final String id;
@@ -41,7 +45,7 @@ class Menu {
         name: json['name'],
         description: json['description'],
         category: json['category'],
-        price: json['price'].toDouble(),
+        price: json['price'].toDouble() * 2000,
         stock: json['stock'],
         image: json['image'],
         createdAt: json['createdAt'],
