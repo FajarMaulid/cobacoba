@@ -111,6 +111,7 @@ class _MenuScreenState extends State<MenuScreen> {
       _menus = result;
       return result;
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -119,38 +120,50 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     // getProducts(MenuCategory.starter);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Header(
-            text: const Text(
-              "Menu",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                  color: Colors.white),
-            ),
-            widget: CustomSearchBar(
-                searchTextController: _searchTextController,
-                search: handleTitleTextChange)),
-        Stack(children: [
-          Padding(
-              padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CategoriesWidget(
-                    selectedCategory: _selectedCategory,
-                    setSelectedCategory: setSelectedCategory,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height - 358,
-                      child: Stack(
-                        children: [
-                          Scrollbar(
+    return SizedBox(
+      height: MediaQuery.sizeOf(context).height,
+      width: MediaQuery.sizeOf(context).width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 4,
+            child: Header(
+                text: const Text(
+                  "Menu",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      color: Colors.white),
+                ),
+                widget: CustomSearchBar(
+                    searchTextController: _searchTextController,
+                    search: handleTitleTextChange)),
+          ),
+          const Expanded(flex: 1, child: SizedBox()),
+          Expanded(
+            flex: 20,
+            child: Stack(children: [
+              Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 5,
+                        child: CategoriesWidget(
+                          selectedCategory: _selectedCategory,
+                          setSelectedCategory: setSelectedCategory,
+                        ),
+                      ),
+                      const Expanded(
+                        flex: 1,
+                        child: SizedBox(),
+                      ),
+                      Expanded(
+                        flex: 18,
+                        child: SizedBox(
+                          child: Scrollbar(
                               child: SingleChildScrollView(
                                   child: FutureBuilder(
                                       future: getMenus(),
@@ -191,27 +204,36 @@ class _MenuScreenState extends State<MenuScreen> {
                                           ),
                                         );
                                       }))),
-                          Container(),
-                          _addedMenus.isNotEmpty
-                              ? AddedMenuPrice(
-                                  totalItem: totalItem,
-                                  totalPrice: totalPrice,
-                                  callback: toggleChoosingStatus)
-                              : Container()
-                        ],
-                      ))
-                ],
-              )),
-          (_isDoneChoosing)
-              ? CheckoutPopup(
-                  toggleChoosingStatus: toggleChoosingStatus,
-                  finalPrice: totalPrice,
-                  addedMenu: _addedMenu,
-                  addedMenus: _addedMenus,
-                  reset: reset)
-              : Container()
-        ]),
-      ],
+                          //   Container(),
+                          //   _addedMenus.isNotEmpty
+                          //       ? AddedMenuPrice(
+                          //           totalItem: totalItem,
+                          //           totalPrice: totalPrice,
+                          //           callback: toggleChoosingStatus)
+                          //       : Container()
+                          // ],
+                        ),
+                      )
+                    ],
+                  )),
+              _addedMenus.isNotEmpty
+                  ? AddedMenuPrice(
+                      totalItem: totalItem,
+                      totalPrice: totalPrice,
+                      callback: toggleChoosingStatus)
+                  : Container(),
+              (_isDoneChoosing)
+                  ? CheckoutPopup(
+                      toggleChoosingStatus: toggleChoosingStatus,
+                      finalPrice: totalPrice,
+                      addedMenu: _addedMenu,
+                      addedMenus: _addedMenus,
+                      reset: reset)
+                  : Container()
+            ]),
+          ),
+        ],
+      ),
     );
   }
 }
