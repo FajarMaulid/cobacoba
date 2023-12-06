@@ -34,158 +34,104 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
               borderRadius: BorderRadius.all(Radius.circular(5))),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            GestureDetector(
-              child: Container(
-                padding: (widget.selectedCategory == MenuCategory.starter)
-                    ? const EdgeInsets.all(5)
-                    : const EdgeInsets.all(5),
-                decoration: (widget.selectedCategory == MenuCategory.starter)
-                    ? const BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.all(Radius.circular(5)))
-                    : const BoxDecoration(),
-                child: Column(
-                  children: [
-                    Image.asset('assets/images/starter-category.png'),
-                    Text(
-                      "Starters",
-                      style: TextStyle(
-                          fontSize: 12,
-                          color:
-                              (widget.selectedCategory == MenuCategory.starter)
-                                  ? Colors.white
-                                  : Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () {
-                setState(() {
-                  widget.setSelectedCategory(MenuCategory.starter);
-                });
-              },
+            CategoryItem(
+                selectedCategory: widget.selectedCategory,
+                imagePath: 'assets/images/starter-category.png',
+                setSelectedCategory: widget.setSelectedCategory,
+                chosenCategory: MenuCategory.starter,
+                title: "Starter"),
+            CategoryItem(
+              selectedCategory: widget.selectedCategory,
+              imagePath: 'assets/images/main-course-category.png',
+              setSelectedCategory: widget.setSelectedCategory,
+              chosenCategory: MenuCategory.mainCourse,
+              title: "Main Course",
             ),
-            GestureDetector(
-              child: Container(
-                padding: (widget.selectedCategory == MenuCategory.mainCourse)
-                    ? const EdgeInsets.all(5)
-                    : const EdgeInsets.all(0),
-                decoration: (widget.selectedCategory == MenuCategory.mainCourse)
-                    ? const BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.all(Radius.circular(5)))
-                    : const BoxDecoration(),
-                child: Column(
-                  children: [
-                    Image.asset('assets/images/main-course-category.png'),
-                    Text(
-                      "Main Course",
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: (widget.selectedCategory ==
-                                  MenuCategory.mainCourse)
-                              ? Colors.white
-                              : Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () {
-                setState(() {
-                  widget.setSelectedCategory(MenuCategory.mainCourse);
-                });
-              },
+            CategoryItem(
+              selectedCategory: widget.selectedCategory,
+              imagePath: 'assets/images/side-dish-category.png',
+              setSelectedCategory: widget.setSelectedCategory,
+              chosenCategory: MenuCategory.sideDish,
+              title: "Side Dish",
             ),
-            GestureDetector(
-              child: Container(
-                padding: (widget.selectedCategory == MenuCategory.sideDish)
-                    ? const EdgeInsets.all(5)
-                    : const EdgeInsets.all(0),
-                decoration: (widget.selectedCategory == MenuCategory.sideDish)
-                    ? const BoxDecoration(
-                        color: Color(0xffFF725E),
-                        borderRadius: BorderRadius.all(Radius.circular(5)))
-                    : const BoxDecoration(),
-                child: Column(
-                  children: [
-                    Image.asset('assets/images/side-dish-category.png'),
-                    Text(
-                      "Side Dish",
-                      style: TextStyle(
-                          fontSize: 12,
-                          color:
-                              (widget.selectedCategory == MenuCategory.sideDish)
-                                  ? Colors.white
-                                  : Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () {
-                widget.setSelectedCategory(MenuCategory.sideDish);
-              },
+            CategoryItem(
+              selectedCategory: widget.selectedCategory,
+              imagePath: 'assets/images/dessert-category.png',
+              setSelectedCategory: widget.setSelectedCategory,
+              chosenCategory: MenuCategory.dessert,
+              title: "Dessert",
             ),
-            GestureDetector(
-              child: Container(
-                padding: (widget.selectedCategory == MenuCategory.dessert)
-                    ? const EdgeInsets.all(5)
-                    : const EdgeInsets.all(0),
-                decoration: (widget.selectedCategory == MenuCategory.dessert)
-                    ? const BoxDecoration(
-                        color: Color(0xffFF725E),
-                        borderRadius: BorderRadius.all(Radius.circular(5)))
-                    : const BoxDecoration(),
-                child: Column(
-                  children: [
-                    Image.asset('assets/images/dessert-category.png'),
-                    Text(
-                      "Dessert",
-                      style: TextStyle(
-                          fontSize: 12,
-                          color:
-                              (widget.selectedCategory == MenuCategory.dessert)
-                                  ? Colors.white
-                                  : Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () {
-                widget.setSelectedCategory(MenuCategory.dessert);
-              },
-            ),
-            GestureDetector(
-              child: Container(
-                padding: (widget.selectedCategory == MenuCategory.beverage)
-                    ? const EdgeInsets.all(5)
-                    : const EdgeInsets.all(0),
-                decoration: (widget.selectedCategory == MenuCategory.beverage)
-                    ? const BoxDecoration(
-                        color: Color(0xffFF725E),
-                        borderRadius: BorderRadius.all(Radius.circular(5)))
-                    : const BoxDecoration(),
-                child: Column(
-                  children: [
-                    Image.asset('assets/images/beverages-category.png'),
-                    Text(
-                      "Beverages",
-                      style: TextStyle(
-                          fontSize: 12,
-                          color:
-                              (widget.selectedCategory == MenuCategory.beverage)
-                                  ? Colors.white
-                                  : Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () {
-                widget.setSelectedCategory(MenuCategory.beverage);
-              },
+            CategoryItem(
+              selectedCategory: widget.selectedCategory,
+              imagePath: 'assets/images/beverages-category.png',
+              setSelectedCategory: widget.setSelectedCategory,
+              chosenCategory: MenuCategory.beverage,
+              title: "Beverage",
             ),
           ]),
         ),
       ],
+    );
+  }
+}
+
+class CategoryItem extends StatelessWidget {
+  const CategoryItem(
+      {super.key,
+      required this.selectedCategory,
+      required this.setSelectedCategory,
+      required this.chosenCategory,
+      required this.imagePath,
+      required this.title});
+
+  final String title;
+  final String imagePath;
+  final MenuCategory selectedCategory;
+  final MenuCategory chosenCategory;
+  final Function(MenuCategory) setSelectedCategory;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Container(
+        padding: (selectedCategory == chosenCategory)
+            ? const EdgeInsets.only(left: 5, top: 8, right: 5, bottom: 1)
+            : const EdgeInsets.only(bottom: 1),
+        decoration: (selectedCategory == chosenCategory)
+            ? const BoxDecoration(
+                color: primaryColor,
+                borderRadius: BorderRadius.all(Radius.circular(5)))
+            : const BoxDecoration(),
+        child: Column(
+          children: [
+            Image.asset(imagePath),
+            Center(
+              child: Container(
+                padding: EdgeInsets.only(top: 1),
+                height: 25,
+                width: 50,
+                child: Center(
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 12,
+                        letterSpacing: 0,
+                        wordSpacing: 1,
+                        height: 1,
+                        color: (selectedCategory == chosenCategory)
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        setSelectedCategory(chosenCategory);
+      },
     );
   }
 }

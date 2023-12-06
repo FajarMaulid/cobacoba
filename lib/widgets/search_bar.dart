@@ -26,6 +26,7 @@ class CustomSearchBar extends StatelessWidget {
             height: double.infinity,
             width: double.infinity,
             child: TextField(
+              cursorColor: primaryColor,
               onSubmitted: (value) {
                 search();
               },
@@ -40,7 +41,7 @@ class CustomSearchBar extends StatelessWidget {
                 enabledBorder: InputBorder.none,
                 errorBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
-                contentPadding: EdgeInsets.all(0),
+                contentPadding: EdgeInsets.only(bottom: 7),
                 counter: null,
                 counterText: "",
                 hintText: 'Search',
