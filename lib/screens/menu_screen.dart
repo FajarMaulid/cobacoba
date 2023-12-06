@@ -121,8 +121,6 @@ class _MenuScreenState extends State<MenuScreen> {
     // getProducts(MenuCategory.starter);
 
     return SizedBox(
-      height: MediaQuery.sizeOf(context).height,
-      width: MediaQuery.sizeOf(context).width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -150,19 +148,16 @@ class _MenuScreenState extends State<MenuScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        flex: 5,
+                        flex: 6,
                         child: CategoriesWidget(
                           selectedCategory: _selectedCategory,
                           setSelectedCategory: setSelectedCategory,
                         ),
                       ),
-                      const Expanded(
-                        flex: 1,
-                        child: SizedBox(),
-                      ),
                       Expanded(
                         flex: 18,
-                        child: SizedBox(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 5),
                           child: Scrollbar(
                               child: SingleChildScrollView(
                                   child: FutureBuilder(
