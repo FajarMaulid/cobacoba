@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Transaction Screen',
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-      ),
-      home: TransactionScreen(),
-    );
-  }
-}
-
 class TransactionScreen extends StatelessWidget {
+  const TransactionScreen(
+      {super.key, required this.finalPrice, required this.reset});
+
+  final Function() reset;
+  final String finalPrice;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,9 +91,9 @@ class TransactionScreen extends StatelessWidget {
                           height: 20,
                         ),
                         Text(
-                          'Money Changes : Rp.15.000',
+                          'Money Changes : Rp$finalPrice',
                           style: TextStyle(
-                            fontSize: 18.0,
+                            fontSize: 15.0,
                             color: Colors.white,
                           ),
                         ),
@@ -155,7 +144,8 @@ class TransactionScreen extends StatelessWidget {
                   SizedBox(height: 16.0),
                   ElevatedButton(
                     onPressed: () {
-                      // TODO: Implement next order functionality
+                      reset();
+                      Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.transparent,

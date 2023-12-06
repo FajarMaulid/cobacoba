@@ -1,4 +1,5 @@
 import 'package:cashier/models/menu.dart';
+import 'package:cashier/screens/transaction_successful.dart';
 import 'package:cashier/utils/color.dart';
 import 'package:flutter/material.dart';
 
@@ -7,9 +8,13 @@ class CheckoutPopup extends StatefulWidget {
       {super.key,
       required this.toggleChoosingStatus,
       required this.addedMenu,
-      required this.addedMenus});
+      required this.addedMenus,
+      required this.finalPrice,
+      required this.reset});
 
+  final String finalPrice;
   final Function({bool value}) toggleChoosingStatus;
+  final Function() reset;
   final Map<String, int> addedMenu;
   final Set<Menu> addedMenus;
 
@@ -129,18 +134,28 @@ class _CheckoutPopupState extends State<CheckoutPopup> {
                     decoration: const BoxDecoration(
                         color: primaryColor,
                         borderRadius: BorderRadius.all(Radius.circular(6))),
-                    child: const Center(
-                        child: Text('Check Out',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700))),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TransactionScreen(
+                                  reset: widget.reset,
+                                  finalPrice: widget.finalPrice)),
+                        );
+                      },
+                      child: const Center(
+                          child: Text('Check Out',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700))),
+                    ),
                   ))
             ]),
           ),
         )
       ]),
     );
-    // TODO: implement build
   }
 }

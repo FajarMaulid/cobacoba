@@ -28,6 +28,16 @@ class _MenuScreenState extends State<MenuScreen> {
   int _selectedNav = 0;
   bool _isDoneChoosing = false;
 
+  void reset() {
+    setState(() {
+      _addedMenu.clear();
+      _addedMenus.clear();
+      totalPrice = "";
+      totalItem = 0;
+      _isDoneChoosing = false;
+    });
+  }
+
   void onNavbarTapped(int index) {
     setState(() {
       _selectedNav = index;
@@ -190,8 +200,10 @@ class _MenuScreenState extends State<MenuScreen> {
             (_isDoneChoosing)
                 ? CheckoutPopup(
                     toggleChoosingStatus: toggleChoosingStatus,
+                    finalPrice: totalPrice,
                     addedMenu: _addedMenu,
-                    addedMenus: _addedMenus)
+                    addedMenus: _addedMenus,
+                    reset: reset)
                 : Container()
           ]),
         ],
