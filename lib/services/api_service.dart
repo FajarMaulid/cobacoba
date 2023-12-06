@@ -16,7 +16,7 @@ class APIService {
       query['search'] = search;
     }
 
-    var url = Uri.http(dotenv.get('API_URL'), Config.menuEndpoint, query);
+    var url = Uri.https(dotenv.get('API_URL'), Config.menuEndpoint, query);
 
     var response = await client.get(url);
 
@@ -29,11 +29,21 @@ class APIService {
       'Content-Type': 'application/json',
     };
 
-    var url = Uri.http(dotenv.get('API_URL'), Config.orderEndpoint);
+    var url = Uri.https(dotenv.get('API_URL'), Config.orderEndpoint);
 
     var response = await client.post(url,
         headers: requestHeaders, body: jsonEncode(order.toJson()));
 
     return response.body;
+  }
+
+  static Future<PaginateOrder> getOrderList(int currentPage) async {
+    final query = {'page': '$currentPage', 'limit': '10'};
+    var url = Uri.https(dotenv.get('API_URL'), Config.orderEndpoint, query);
+
+    var response = await client.get(url);
+
+    var result = paginateOrderResponseModel(response.body);
+    return result;
   }
 }

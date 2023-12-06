@@ -68,3 +68,51 @@ class Order {
     };
   }
 }
+
+class PaginationMeta {
+  int itemCount;
+  int? totalItems;
+  int itemsPerPage;
+  int? totalPages;
+  int currentPage;
+
+  PaginationMeta({
+    required this.itemCount,
+    this.totalItems,
+    required this.itemsPerPage,
+    this.totalPages,
+    required this.currentPage,
+  });
+
+  factory PaginationMeta.fromJson(Map<String, dynamic> json) {
+    return PaginationMeta(
+      itemCount: json['itemCount'],
+      totalItems: json['totalItems'],
+      itemsPerPage: json['itemsPerPage'],
+      totalPages: json['totalPages'],
+      currentPage: json['currentPage'],
+    );
+  }
+}
+
+PaginateOrder paginateOrderResponseModel(String str) =>
+    PaginateOrder.fromJson(json.decode(str));
+
+class PaginateOrder {
+  final List<Order> items;
+  final PaginationMeta meta;
+
+  PaginateOrder({
+    required this.items,
+    required this.meta,
+  });
+
+  factory PaginateOrder.fromJson(Map<String, dynamic> json) {
+    return PaginateOrder(
+      items: (json['items'] as List<dynamic>)
+          .map((item) => Order.fromJson(item))
+          .toList(),
+      meta: PaginationMeta.fromJson(json['meta']),
+    );
+  }
+}

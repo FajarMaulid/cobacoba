@@ -1,4 +1,5 @@
 import 'package:cashier/screens/menu_screen.dart';
+import 'package:cashier/screens/order_history.dart';
 import 'package:cashier/screens/settings_screen.dart';
 import 'package:cashier/utils/color.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +18,10 @@ class MainScreenState extends State<MainScreen> {
     });
   }
 
-  static const List<Widget> _pages = <Widget>[
-    MenuScreen(),
-    Icon(
-      Icons.camera,
-      size: 150,
-    ),
-    SettingsScreen(),
+  static final List<Widget> _pages = <Widget>[
+    const MenuScreen(),
+    OrderHistoryScreen(),
+    const SettingsScreen(),
   ];
 
   @override

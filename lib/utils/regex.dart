@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-String formatAmount(double amount) {
+String formatAmount(dynamic amount) {
   final formatter = NumberFormat("#,##0", "en_US");
   return formatter.format(amount);
 }
@@ -15,4 +15,9 @@ int parseFormattedAmount(String formattedAmount) {
   } else {
     throw const FormatException('Invalid formatted amount');
   }
+}
+
+String formatDate(DateTime date) {
+  final DateFormat formatter = DateFormat('dd/MM/yyyy');
+  return formatter.format(date);
 }

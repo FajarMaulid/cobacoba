@@ -1,3 +1,9 @@
+import 'package:cashier/models/order.dart';
+import 'package:cashier/services/api_service.dart';
+import 'package:cashier/utils/color.dart';
+import 'package:cashier/utils/regex.dart';
+import 'package:cashier/widgets/header.dart';
+import 'package:cashier/widgets/order_history_summary.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -297,6 +303,181 @@ class _OrderScreen extends State<OrderScreen>
           ),
         ],
       ),
+    );
+  }
+}
+
+class OrderHistoryScreen extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => OrderHistoryScreenState();
+}
+
+class OrderHistoryScreenState extends State<OrderHistoryScreen> {
+  PaginationMeta _paginationMeta = PaginationMeta(
+      currentPage: 1,
+      itemCount: 10,
+      itemsPerPage: 1,
+      totalPages: 2,
+      totalItems: 10);
+  List<Order> _currentPage = [];
+  late Future<List<Order>> _ordersFuture;
+  bool isThisLastPage = true;
+  bool isThisFirstPage = true;
+
+  void setIsThisLastPage() {
+    isThisLastPage = _paginationMeta.currentPage == _paginationMeta.totalPages;
+  }
+
+  void setIsThisFirstPage() {
+    isThisFirstPage = _paginationMeta.currentPage == 1;
+  }
+
+  void nextPage() {
+    setState(() {
+      _paginationMeta.currentPage++;
+      _ordersFuture = getOrders(); // Reset the future to fetch new data
+    });
+  }
+
+  void previousPage() {
+    setState(() {
+      _paginationMeta.currentPage--;
+      _ordersFuture = getOrders(); // Reset the future to fetch new data
+    });
+  }
+
+  Future<List<Order>> getOrders() async {
+    try {
+      PaginateOrder result =
+          await APIService.getOrderList(_paginationMeta.currentPage);
+      _paginationMeta = result.meta;
+      _currentPage = result.items;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          setIsThisFirstPage();
+          setIsThisLastPage();
+        });
+      });
+
+      return result.items;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _ordersFuture = getOrders();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Header(
+            text: Text(
+          "Orders",
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 25, color: Colors.white),
+        )),
+        Container(
+          height: MediaQuery.sizeOf(context).height - 160,
+          padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+          child: Column(
+            children: [
+              const Card(
+                color: primaryColor,
+                elevation: 6,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                      bottomLeft: Radius.circular(5),
+                      bottomRight: Radius.circular(5)),
+                ),
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: ListTile(
+                  dense: true,
+                  visualDensity: VisualDensity.compact,
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Order Id',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14),
+                      ),
+                      Text(
+                        'Date',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14),
+                      ),
+                      Text(
+                        "Total Price",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: FutureBuilder(
+                  future: _ordersFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        padding: const EdgeInsets.all(0),
+                        itemCount: _currentPage.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Order curr = _currentPage[index];
+                          String id = curr.id!.split('-')[0];
+                          String date = formatDate(curr.orderAt!);
+                          String totalPrice = formatAmount(curr.totalPrice);
+                          return OrderHistorySummary(
+                              id: id, date: date, totalPrice: totalPrice);
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return const Center(
+                          child: Text('Error reading database'));
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: secondaryColor,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios),
+                        onPressed: isThisFirstPage ? null : previousPage,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_forward_ios),
+                        onPressed: isThisLastPage ? null : nextPage,
+                      ),
+                    ],
+                  )),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
