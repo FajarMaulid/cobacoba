@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import 'package:cashier/screens/menu_screen.dart';
 import 'package:cashier/utils/color.dart';
+=======
+import 'package:cashier/transaction_successful.dart';
+>>>>>>> e126cc4 (Sena menambahkan Screen Transaction Successful)
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -23,12 +27,28 @@ class WelcomeScreen extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: Colors.white),
               ),
+<<<<<<< HEAD
               const Text(
                 'CashHere',
                 style: TextStyle(
                   fontSize: 50,
                   fontWeight: FontWeight.w900,
                   color: primaryColor,
+=======
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionScreen()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: const Color(0xffFF725E),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+>>>>>>> e126cc4 (Sena menambahkan Screen Transaction Successful)
                 ),
               ),
               Padding(
