@@ -1,4 +1,5 @@
 import 'package:cashier/screens/menu_screen.dart';
+import 'package:cashier/screens/settings_screen.dart';
 import 'package:cashier/utils/color.dart';
 import 'package:flutter/material.dart';
 
@@ -22,10 +23,7 @@ class MainScreenState extends State<MainScreen> {
       Icons.camera,
       size: 150,
     ),
-    Icon(
-      Icons.chat,
-      size: 150,
-    ),
+    SettingsScreen(),
   ];
 
   @override
