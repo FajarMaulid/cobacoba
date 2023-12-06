@@ -1,3 +1,5 @@
+import 'package:cashier/screens/menu_screen.dart';
+import 'package:cashier/utils/color.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -6,45 +8,51 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff18273F),
+      backgroundColor: secondaryColor,
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            const SizedBox(height: 15), // For spacing
-            Image.asset('assets/images/welcome_image.png'),
-            const Text(
-              'Welcome To',
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white),
-            ),
-            const Text(
-              'CashHere',
-              style: TextStyle(
-                fontSize: 50,
-                fontWeight: FontWeight.w900,
-                color: Color(0xffFF725E),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              const SizedBox(height: 15), // For spacing
+              Image.asset('assets/images/welcome_image.png'),
+              const Text(
+                'Welcome To',
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-              child: ElevatedButton(
-                onPressed: () {
-                  // TODO
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: const Color(0xffFF725E),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              const Text(
+                'CashHere',
+                style: TextStyle(
+                  fontSize: 50,
+                  fontWeight: FontWeight.w900,
+                  color: primaryColor,
                 ),
-                child: const Text('Get Started'),
               ),
-            ),
-            const SizedBox(height: 20), // For spacing
-          ],
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MenuScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: primaryColor,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 12),
+                  ),
+                  child: const Text('Get Started'),
+                ),
+              ),
+              const SizedBox(height: 20), // For spacing
+            ],
+          ),
         ),
       ),
     );
