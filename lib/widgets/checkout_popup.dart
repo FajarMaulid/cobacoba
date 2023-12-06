@@ -25,6 +25,21 @@ class CheckoutPopup extends StatefulWidget {
 }
 
 class _CheckoutPopupState extends State<CheckoutPopup> {
+  final TextEditingController _titleTextController = TextEditingController();
+  String name = "";
+
+  void setName() {
+    setState(() {
+      name = _titleTextController.text.trim();
+    });
+  }
+
+  @override
+  initState() {
+    super.initState();
+    _titleTextController.addListener(setName);
+  }
+
   Future<void> postOrder() async {
     try {
       List<OrderMenu> menus = widget.addedMenus.toList().map((e) {
@@ -33,7 +48,7 @@ class _CheckoutPopupState extends State<CheckoutPopup> {
       }).toList();
 
       var order = Order(
-          recipientName: "Mr. Jamal",
+          recipientName: name,
           menus: menus,
           totalPrice: double.parse(widget.finalPrice).toInt());
 
@@ -83,15 +98,36 @@ class _CheckoutPopupState extends State<CheckoutPopup> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
             child: Column(children: [
-              const Expanded(
+              Expanded(
                 flex: 1,
                 child: Row(
                   children: [
-                    Icon(Icons.person_2_outlined),
-                    SizedBox(
-                      width: 2,
+                    const Icon(Icons.person_2_outlined),
+                    const SizedBox(
+                      width: 5,
                     ),
-                    Text("Mr. Jamal")
+                    Container(
+                        width: 100,
+                        child: TextField(
+                          controller: _titleTextController,
+                          style: const TextStyle(
+                            decoration: TextDecoration.none,
+                            decorationThickness: 0,
+                          ),
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.all(0),
+                            counter: null,
+                            counterText: "",
+                            hintText: 'Name',
+                            hintStyle: TextStyle(
+                                fontSize: 17, height: 2, color: Colors.grey),
+                          ),
+                        ))
                   ],
                 ),
               ),
