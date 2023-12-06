@@ -383,7 +383,7 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
               fontWeight: FontWeight.bold, fontSize: 25, color: Colors.white),
         )),
         Container(
-          height: MediaQuery.sizeOf(context).height - 160,
+          height: MediaQuery.sizeOf(context).height - 165,
           padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
           child: Column(
             children: [
