@@ -1,6 +1,7 @@
 import 'package:cashier/models/menu.dart';
 import 'package:cashier/services/api_service.dart';
 import 'package:cashier/utils/color.dart';
+import 'package:cashier/utils/regex.dart';
 import 'package:cashier/widgets/added_menu_price.dart';
 import 'package:cashier/widgets/categories.dart';
 import 'package:cashier/widgets/checkout_popup.dart';
@@ -27,7 +28,6 @@ class _MenuScreenState extends State<MenuScreen> {
   String searchValue = "";
   String totalPrice = "";
   int totalItem = 0;
-  int _selectedNav = 0;
   bool _isDoneChoosing = false;
 
   void handleTitleTextChange() {
@@ -43,12 +43,6 @@ class _MenuScreenState extends State<MenuScreen> {
       totalPrice = "";
       totalItem = 0;
       _isDoneChoosing = false;
-    });
-  }
-
-  void onNavbarTapped(int index) {
-    setState(() {
-      _selectedNav = index;
     });
   }
 
@@ -76,7 +70,7 @@ class _MenuScreenState extends State<MenuScreen> {
       total +=
           _addedMenus.firstWhere((element) => element.id == key).price * value;
     });
-    totalPrice = total.toStringAsFixed(2);
+    totalPrice = formatAmount(total);
   }
 
   void addMenu(Menu menu) {
@@ -125,127 +119,99 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     // getProducts(MenuCategory.starter);
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xffcfcfcf),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Header(
-              text: Text(
-                "Menu",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    color: Colors.white),
-              ),
-              widget: CustomSearchBar(
-                  searchTextController: _searchTextController,
-                  search: handleTitleTextChange)),
-          Stack(children: [
-            Padding(
-                padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CategoriesWidget(
-                      selectedCategory: _selectedCategory,
-                      setSelectedCategory: setSelectedCategory,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height - 342,
-                        child: Stack(
-                          children: [
-                            Scrollbar(
-                                child: SingleChildScrollView(
-                                    child: FutureBuilder(
-                                        future: getMenus(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return GridView.builder(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 60),
-                                              shrinkWrap: true,
-                                              physics: const ScrollPhysics(),
-                                              itemCount: _menus.length,
-                                              itemBuilder: (context, index) {
-                                                Menu menu = _menus[index];
-                                                int currentAmount =
-                                                    _addedMenu[menu.id] ?? 0;
-                                                return MenuWidget(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Header(
+            text: const Text(
+              "Menu",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  color: Colors.white),
+            ),
+            widget: CustomSearchBar(
+                searchTextController: _searchTextController,
+                search: handleTitleTextChange)),
+        Stack(children: [
+          Padding(
+              padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CategoriesWidget(
+                    selectedCategory: _selectedCategory,
+                    setSelectedCategory: setSelectedCategory,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height - 342,
+                      child: Stack(
+                        children: [
+                          Scrollbar(
+                              child: SingleChildScrollView(
+                                  child: FutureBuilder(
+                                      future: getMenus(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return GridView.builder(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 60),
+                                            shrinkWrap: true,
+                                            physics: const ScrollPhysics(),
+                                            itemCount: _menus.length,
+                                            itemBuilder: (context, index) {
+                                              Menu menu = _menus[index];
+                                              int currentAmount =
+                                                  _addedMenu[menu.id] ?? 0;
+                                              String price =
+                                                  formatAmount(menu.price);
+                                              return MenuWidget(
                                                   menu: menu,
                                                   addMenu: addMenu,
                                                   removeMenu: removeMenu,
                                                   currentAmount: currentAmount,
-                                                );
-                                              },
-                                              gridDelegate:
-                                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                                      mainAxisExtent: 130,
-                                                      crossAxisCount: 3),
-                                            );
-                                          } else if (snapshot.hasError) {
-                                            return const Center(
-                                                child: Text(
-                                                    'Error reading database'));
-                                          }
-                                          return const Center(
-                                            child: CircularProgressIndicator(
-                                              color: secondaryColor,
-                                            ),
+                                                  price: price);
+                                            },
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                                    mainAxisExtent: 130,
+                                                    crossAxisCount: 3),
                                           );
-                                        }))),
-                            Container(),
-                            _addedMenus.isNotEmpty
-                                ? AddedMenuPrice(
-                                    totalItem: totalItem,
-                                    totalPrice: totalPrice,
-                                    callback: toggleChoosingStatus)
-                                : Container()
-                          ],
-                        ))
-                  ],
-                )),
-            (_isDoneChoosing)
-                ? CheckoutPopup(
-                    toggleChoosingStatus: toggleChoosingStatus,
-                    finalPrice: totalPrice,
-                    addedMenu: _addedMenu,
-                    addedMenus: _addedMenus,
-                    reset: reset)
-                : Container()
-          ]),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
-          ),
-          child: BottomNavigationBar(
-            elevation: 0,
-            fixedColor: primaryColor,
-            backgroundColor: Colors.white,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.menu_book), label: "Menu"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.history), label: "History"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.settings), label: "Settings"),
-            ],
-            currentIndex: _selectedNav,
-            onTap: onNavbarTapped,
-          ),
-        ),
-      ),
+                                        } else if (snapshot.hasError) {
+                                          return const Center(
+                                              child: Text(
+                                                  'Error reading database'));
+                                        }
+                                        return const Center(
+                                          child: CircularProgressIndicator(
+                                            color: secondaryColor,
+                                          ),
+                                        );
+                                      }))),
+                          Container(),
+                          _addedMenus.isNotEmpty
+                              ? AddedMenuPrice(
+                                  totalItem: totalItem,
+                                  totalPrice: totalPrice,
+                                  callback: toggleChoosingStatus)
+                              : Container()
+                        ],
+                      ))
+                ],
+              )),
+          (_isDoneChoosing)
+              ? CheckoutPopup(
+                  toggleChoosingStatus: toggleChoosingStatus,
+                  finalPrice: totalPrice,
+                  addedMenu: _addedMenu,
+                  addedMenus: _addedMenus,
+                  reset: reset)
+              : Container()
+        ]),
+      ],
     );
   }
 }

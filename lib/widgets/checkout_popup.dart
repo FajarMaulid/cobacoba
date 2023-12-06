@@ -3,6 +3,7 @@ import 'package:cashier/models/order.dart';
 import 'package:cashier/screens/transaction_successful.dart';
 import 'package:cashier/services/api_service.dart';
 import 'package:cashier/utils/color.dart';
+import 'package:cashier/utils/regex.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutPopup extends StatefulWidget {
@@ -50,7 +51,7 @@ class _CheckoutPopupState extends State<CheckoutPopup> {
       var order = Order(
           recipientName: name,
           menus: menus,
-          totalPrice: double.parse(widget.finalPrice).toInt());
+          totalPrice: parseFormattedAmount(widget.finalPrice));
 
       await APIService.postOrder(order);
     } catch (e) {

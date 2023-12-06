@@ -38,7 +38,7 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
               child: Container(
                 padding: (widget.selectedCategory == MenuCategory.starter)
                     ? const EdgeInsets.all(5)
-                    : const EdgeInsets.all(0),
+                    : const EdgeInsets.all(5),
                 decoration: (widget.selectedCategory == MenuCategory.starter)
                     ? const BoxDecoration(
                         color: primaryColor,

@@ -9,12 +9,14 @@ class MenuWidget extends StatelessWidget {
     required this.addMenu,
     required this.removeMenu,
     required this.currentAmount,
+    required this.price,
   });
 
   final Menu menu;
   final Function(Menu) addMenu;
   final Function(Menu) removeMenu;
   final int currentAmount;
+  final String price;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class MenuWidget extends StatelessWidget {
                     menu.name,
                     textAlign: TextAlign.center,
                   ))),
-              Expanded(flex: 1, child: Center(child: Text("Rp${menu.price}"))),
+              Expanded(flex: 1, child: Center(child: Text("Rp$price"))),
             ]),
           ),
           Expanded(

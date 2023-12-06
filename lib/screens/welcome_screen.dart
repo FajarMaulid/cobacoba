@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:cashier/screens/menu_screen.dart';
+=======
+import 'package:cashier/screens/main_screen.dart';
+>>>>>>> 09e088b (feat: implement navbar functionality)
 import 'package:cashier/utils/color.dart';
 =======
 import 'package:cashier/transaction_successful.dart';
@@ -58,7 +62,7 @@ class WelcomeScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MenuScreen()),
+                      MaterialPageRoute(builder: (context) => MainScreen()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
