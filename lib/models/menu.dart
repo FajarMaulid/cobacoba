@@ -51,6 +51,21 @@ class Menu {
         createdAt: json['createdAt'],
         modifiedAt: json['modifiedAt']);
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'category': category, // Assuming MenuCategory has a toJson method
+      'price':
+          price / 2000, // Divide by 2000 to revert the conversion from JSON
+      'stock': stock,
+      'image': image,
+      'createdAt': createdAt?.toIso8601String(),
+      'modifiedAt': modifiedAt?.toIso8601String(),
+    };
+  }
 }
 
 PaginateMenu paginateMenuResponseModel(String str) =>

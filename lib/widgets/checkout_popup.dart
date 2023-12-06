@@ -1,5 +1,7 @@
 import 'package:cashier/models/menu.dart';
+import 'package:cashier/models/order.dart';
 import 'package:cashier/screens/transaction_successful.dart';
+import 'package:cashier/services/api_service.dart';
 import 'package:cashier/utils/color.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +25,24 @@ class CheckoutPopup extends StatefulWidget {
 }
 
 class _CheckoutPopupState extends State<CheckoutPopup> {
+  Future<void> postOrder() async {
+    try {
+      List<OrderMenu> menus = widget.addedMenus.toList().map((e) {
+        int quantity = widget.addedMenu[e.id]!;
+        return OrderMenu(menu: e, quantity: quantity);
+      }).toList();
+
+      var order = Order(
+          recipientName: "Mr. Jamal",
+          menus: menus,
+          totalPrice: double.parse(widget.finalPrice).toInt());
+
+      await APIService.postOrder(order);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -136,6 +156,7 @@ class _CheckoutPopupState extends State<CheckoutPopup> {
                         borderRadius: BorderRadius.all(Radius.circular(6))),
                     child: InkWell(
                       onTap: () {
+                        postOrder();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
