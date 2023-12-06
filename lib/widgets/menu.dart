@@ -20,13 +20,10 @@ class MenuWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      margin: const EdgeInsets.all(5),
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(5))),
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      margin: const EdgeInsets.all(2.5),
       child: Column(
         children: [
           Expanded(
@@ -38,6 +35,7 @@ class MenuWidget extends StatelessWidget {
                       child: Text(
                     menu.name,
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w600),
                   ))),
               Expanded(flex: 1, child: Center(child: Text("Rp$price"))),
             ]),
@@ -49,45 +47,47 @@ class MenuWidget extends StatelessWidget {
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                        Container(
-                          width: 26,
-                          height: 26,
-                          decoration: const BoxDecoration(
-                              color: primaryColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50))),
-                          child: Center(
-                            child: IconButton(
-                              onPressed: () {
-                                removeMenu(menu);
-                              },
-                              icon: const Icon(
-                                Icons.remove,
+                        SizedBox(
+                          height: 24,
+                          child: Card(
+                            elevation: 5,
+                            margin: const EdgeInsets.all(0),
+                            color: primaryColor,
+                            shape: const CircleBorder(),
+                            child: Center(
+                              child: IconButton(
+                                onPressed: () {
+                                  removeMenu(menu);
+                                },
+                                icon: const Icon(
+                                  Icons.remove,
+                                ),
+                                iconSize: 10,
+                                color: Colors.white,
                               ),
-                              iconSize: 11,
-                              color: Colors.white,
                             ),
                           ),
                         ),
                         Text("$currentAmount"),
-                        Container(
-                          width: 26,
-                          height: 26,
-                          decoration: const BoxDecoration(
-                              color: primaryColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50))),
-                          child: IconButton(
-                            onPressed: () {
-                              addMenu(menu);
-                            },
-                            icon: const Icon(
-                              Icons.add,
+                        SizedBox(
+                          height: 24,
+                          child: Card(
+                            elevation: 5,
+                            margin: const EdgeInsets.all(0),
+                            color: primaryColor,
+                            shape: CircleBorder(),
+                            child: IconButton(
+                              onPressed: () {
+                                addMenu(menu);
+                              },
+                              icon: const Icon(
+                                Icons.add,
+                              ),
+                              iconSize: 10,
+                              color: Colors.white,
                             ),
-                            iconSize: 11,
-                            color: Colors.white,
                           ),
-                        ),
+                        )
                       ]),
           )
         ],
@@ -111,13 +111,11 @@ class AddMenuButton extends StatelessWidget {
       onTap: () {
         addMenu(menu);
       },
-      child: Container(
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        elevation: 5,
         margin: const EdgeInsets.all(2),
-        decoration: const BoxDecoration(
-            color: primaryColor,
-            borderRadius: BorderRadius.all(
-              Radius.circular(5),
-            )),
+        color: primaryColor,
         child: const Center(
             child: Text("ADD",
                 style: TextStyle(

@@ -30,7 +30,6 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
         ),
         Container(
           decoration: const BoxDecoration(
-              color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(5))),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -93,40 +92,39 @@ class CategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Container(
-        padding: (selectedCategory == chosenCategory)
-            ? const EdgeInsets.only(left: 5, top: 8, right: 5, bottom: 1)
-            : const EdgeInsets.only(bottom: 1),
-        decoration: (selectedCategory == chosenCategory)
-            ? const BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.all(Radius.circular(5)))
-            : const BoxDecoration(),
-        child: Column(
-          children: [
-            Image.asset(imagePath),
-            Center(
-              child: Container(
-                padding: EdgeInsets.only(top: 1),
-                height: 25,
-                width: 50,
-                child: Center(
-                  child: Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 12,
-                        letterSpacing: 0,
-                        wordSpacing: 1,
-                        height: 1,
-                        color: (selectedCategory == chosenCategory)
-                            ? Colors.white
-                            : Colors.black),
+      child: Card(
+        elevation: 5,
+        color: (selectedCategory == chosenCategory) ? primaryColor : null,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        child: Padding(
+          padding:
+              const EdgeInsets.only(left: 1.2, top: 5, right: 1.2, bottom: 3),
+          child: Column(
+            children: [
+              Image.asset(imagePath),
+              Center(
+                child: Container(
+                  padding: EdgeInsets.only(top: 1),
+                  height: 25,
+                  width: 50,
+                  child: Center(
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 13,
+                          letterSpacing: 0,
+                          wordSpacing: 1,
+                          height: 1,
+                          color: (selectedCategory == chosenCategory)
+                              ? Colors.white
+                              : Colors.black),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       onTap: () {

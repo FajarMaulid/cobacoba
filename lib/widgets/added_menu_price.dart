@@ -23,40 +23,45 @@ class AddedMenuPrice extends StatelessWidget {
         onTap: () {
           callback();
         },
-        child: Container(
-          height: 50,
+        child: Ink(
+          height: 60,
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
-          decoration: const BoxDecoration(
-              color: secondaryColor,
-              borderRadius: BorderRadius.all(Radius.circular(30))),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                flex: 5,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "$totalItem items",
-                      style: const TextStyle(color: Colors.white),
+          child: Card(
+            elevation: 12,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            color: secondaryColor,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "$totalItem items",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          "Rp$totalPrice",
+                          style: const TextStyle(color: Colors.white),
+                        )
+                      ],
                     ),
-                    Text(
-                      "Rp$totalPrice",
-                      style: const TextStyle(color: Colors.white),
-                    )
-                  ],
-                ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 5),
+                    child: Icon(
+                      Icons.shopping_bag,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 5),
-                child: Icon(
-                  Icons.shopping_bag,
-                  color: Colors.white,
-                ),
-              )
-            ],
+            ),
           ),
         ),
       ),

@@ -147,7 +147,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     height: 20,
                   ),
                   SizedBox(
-                      height: MediaQuery.of(context).size.height - 350,
+                      height: MediaQuery.of(context).size.height - 358,
                       child: Stack(
                         children: [
                           Scrollbar(
