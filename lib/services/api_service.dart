@@ -9,8 +9,13 @@ import 'package:http/http.dart' as http;
 class APIService {
   static var client = http.Client();
 
-  static Future<List<Menu>> getMenuByCategory(MenuCategory category) async {
+  static Future<List<Menu>> getMenuByCategory(
+      MenuCategory category, String? search) async {
     final query = {'category': category.value};
+    if (search != null) {
+      query['search'] = search;
+    }
+
     var url = Uri.http(dotenv.get('API_URL'), Config.menuEndpoint, query);
 
     var response = await client.get(url);

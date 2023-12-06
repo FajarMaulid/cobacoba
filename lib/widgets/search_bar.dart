@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 class CustomSearchBar extends StatelessWidget {
-  const CustomSearchBar({super.key});
+  const CustomSearchBar(
+      {super.key, required this.searchTextController, required this.search});
+  final TextEditingController searchTextController;
+  final Function() search;
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +20,34 @@ class CustomSearchBar extends StatelessWidget {
         const SizedBox(
           width: 20,
         ),
-        const Expanded(
+        Expanded(
           flex: 7,
-          child: Text(
-            'Search',
-            style: TextStyle(color: Colors.grey),
+          child: Container(
+            height: double.infinity,
+            width: double.infinity,
+            child: TextField(
+              onSubmitted: (value) {
+                search();
+              },
+              controller: searchTextController,
+              style: const TextStyle(
+                decoration: TextDecoration.none,
+                decorationThickness: 0,
+              ),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                contentPadding: EdgeInsets.all(0),
+                counter: null,
+                counterText: "",
+                hintText: 'Search',
+                hintStyle:
+                    TextStyle(fontSize: 17, height: 2, color: Colors.grey),
+              ),
+            ),
           ),
         ),
         Expanded(
@@ -32,9 +58,14 @@ class CustomSearchBar extends StatelessWidget {
             decoration: const BoxDecoration(
                 color: primaryColor,
                 borderRadius: BorderRadius.all(Radius.circular(30))),
-            child: const Icon(
-              Iconsax.search_normal_1_copy,
-              color: Colors.white,
+            child: IconButton(
+              icon: const Icon(
+                Iconsax.search_normal_1_copy,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                search();
+              },
             ),
           ),
         )

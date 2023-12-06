@@ -23,10 +23,18 @@ class _MenuScreenState extends State<MenuScreen> {
   List<Menu> _menus = [];
   final Map<String, int> _addedMenu = <String, int>{};
   final Set<Menu> _addedMenus = {};
+  final TextEditingController _searchTextController = TextEditingController();
+  String searchValue = "";
   String totalPrice = "";
   int totalItem = 0;
   int _selectedNav = 0;
   bool _isDoneChoosing = false;
+
+  void handleTitleTextChange() {
+    setState(() {
+      searchValue = _searchTextController.text.trim();
+    });
+  }
 
   void reset() {
     setState(() {
@@ -104,7 +112,8 @@ class _MenuScreenState extends State<MenuScreen> {
 
   Future<List<Menu>> getMenus() async {
     try {
-      List<Menu> result = await APIService.getMenuByCategory(_selectedCategory);
+      List<Menu> result =
+          await APIService.getMenuByCategory(_selectedCategory, searchValue);
       _menus = result;
       return result;
     } catch (e) {
@@ -117,11 +126,12 @@ class _MenuScreenState extends State<MenuScreen> {
     // getProducts(MenuCategory.starter);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xffcfcfcf),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Header(
+          Header(
               text: Text(
                 "Menu",
                 style: TextStyle(
@@ -129,7 +139,9 @@ class _MenuScreenState extends State<MenuScreen> {
                     fontSize: 25,
                     color: Colors.white),
               ),
-              widget: CustomSearchBar()),
+              widget: CustomSearchBar(
+                  searchTextController: _searchTextController,
+                  search: handleTitleTextChange)),
           Stack(children: [
             Padding(
                 padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
