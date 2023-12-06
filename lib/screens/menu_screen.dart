@@ -1,7 +1,9 @@
 import 'package:cashier/models/menu.dart';
 import 'package:cashier/services/api_service.dart';
 import 'package:cashier/utils/color.dart';
+import 'package:cashier/widgets/added_menu_price.dart';
 import 'package:cashier/widgets/categories.dart';
+import 'package:cashier/widgets/checkout_popup.dart';
 import 'package:cashier/widgets/header.dart';
 import 'package:cashier/widgets/menu.dart';
 import 'package:cashier/widgets/search_bar.dart';
@@ -24,10 +26,21 @@ class _MenuScreenState extends State<MenuScreen> {
   String totalPrice = "";
   int totalItem = 0;
   int _selectedNav = 0;
+  bool _isDoneChoosing = false;
 
   void onNavbarTapped(int index) {
     setState(() {
       _selectedNav = index;
+    });
+  }
+
+  void toggleChoosingStatus({bool? value}) {
+    setState(() {
+      if (value != null) {
+        _isDoneChoosing = value;
+      } else {
+        _isDoneChoosing = (_isDoneChoosing) ? false : true;
+      }
     });
   }
 
@@ -107,121 +120,80 @@ class _MenuScreenState extends State<MenuScreen> {
                     color: Colors.white),
               ),
               widget: CustomSearchBar()),
-          Padding(
-              padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CategoriesWidget(
-                    selectedCategory: _selectedCategory,
-                    setSelectedCategory: setSelectedCategory,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height - 342,
-                      child: Stack(
-                        children: [
-                          Scrollbar(
-                              child: SingleChildScrollView(
-                                  child: FutureBuilder(
-                                      future: getMenus(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return GridView.builder(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 60),
-                                            shrinkWrap: true,
-                                            physics: const ScrollPhysics(),
-                                            itemCount: _menus.length,
-                                            itemBuilder: (context, index) {
-                                              Menu menu = _menus[index];
-                                              int currentAmount =
-                                                  _addedMenu[menu.id] ?? 0;
-                                              return MenuWidget(
-                                                menu: menu,
-                                                addMenu: addMenu,
-                                                removeMenu: removeMenu,
-                                                currentAmount: currentAmount,
-                                              );
-                                            },
-                                            gridDelegate:
-                                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    mainAxisExtent: 130,
-                                                    crossAxisCount: 3),
-                                          );
-                                        } else if (snapshot.hasError) {
+          Stack(children: [
+            Padding(
+                padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CategoriesWidget(
+                      selectedCategory: _selectedCategory,
+                      setSelectedCategory: setSelectedCategory,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                        height: MediaQuery.of(context).size.height - 342,
+                        child: Stack(
+                          children: [
+                            Scrollbar(
+                                child: SingleChildScrollView(
+                                    child: FutureBuilder(
+                                        future: getMenus(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return GridView.builder(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 60),
+                                              shrinkWrap: true,
+                                              physics: const ScrollPhysics(),
+                                              itemCount: _menus.length,
+                                              itemBuilder: (context, index) {
+                                                Menu menu = _menus[index];
+                                                int currentAmount =
+                                                    _addedMenu[menu.id] ?? 0;
+                                                return MenuWidget(
+                                                  menu: menu,
+                                                  addMenu: addMenu,
+                                                  removeMenu: removeMenu,
+                                                  currentAmount: currentAmount,
+                                                );
+                                              },
+                                              gridDelegate:
+                                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                                      mainAxisExtent: 130,
+                                                      crossAxisCount: 3),
+                                            );
+                                          } else if (snapshot.hasError) {
+                                            return const Center(
+                                                child: Text(
+                                                    'Error reading database'));
+                                          }
                                           return const Center(
-                                              child: Text(
-                                                  'Error reading database'));
-                                        }
-                                        return const Center(
-                                          child: CircularProgressIndicator(
-                                            color: secondaryColor,
-                                          ),
-                                        );
-                                      }))),
-                          Container(),
-                          _addedMenus.isNotEmpty
-                              ? Positioned(
-                                  left: 0,
-                                  right: 0,
-                                  bottom: 6,
-                                  child: InkWell(
-                                    onTap: () {
-                                      // TODO
-                                    },
-                                    child: Container(
-                                      height: 50,
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 25),
-                                      decoration: const BoxDecoration(
-                                          color: secondaryColor,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30))),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            flex: 5,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "$totalItem items",
-                                                  style: const TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                                Text(
-                                                  "Rp$totalPrice",
-                                                  style: const TextStyle(
-                                                      color: Colors.white),
-                                                )
-                                              ],
+                                            child: CircularProgressIndicator(
+                                              color: secondaryColor,
                                             ),
-                                          ),
-                                          const Padding(
-                                            padding: EdgeInsets.only(left: 5),
-                                            child: Icon(
-                                              Icons.shopping_bag,
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : Container()
-                        ],
-                      ))
-                ],
-              )),
+                                          );
+                                        }))),
+                            Container(),
+                            _addedMenus.isNotEmpty
+                                ? AddedMenuPrice(
+                                    totalItem: totalItem,
+                                    totalPrice: totalPrice,
+                                    callback: toggleChoosingStatus)
+                                : Container()
+                          ],
+                        ))
+                  ],
+                )),
+            (_isDoneChoosing)
+                ? CheckoutPopup(
+                    toggleChoosingStatus: toggleChoosingStatus,
+                    addedMenu: _addedMenu,
+                    addedMenus: _addedMenus)
+                : Container()
+          ]),
         ],
       ),
       bottomNavigationBar: Container(
